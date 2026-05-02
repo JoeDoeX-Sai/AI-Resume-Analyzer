@@ -15,7 +15,7 @@ An advanced, NLP-powered AI Resume Analyzer designed to help candidates optimize
 ## 🛠️ Tech Stack
 
 - **Backend**: Python, Flask
-- **NLP & ML**: spaCy (`en_core_web_lg`), Sentence Transformers (`all-MiniLM-L6-v2`), scikit-learn (TF-IDF), RAKE (Keyword Extraction), NLTK
+- **NLP & ML**: spaCy (`en_core_web_sm`), Sentence Transformers (`all-MiniLM-L6-v2`), scikit-learn (TF-IDF), RAKE (Keyword Extraction), NLTK
 - **File Parsing**: pdfminer.six (PDFs), python-docx (Word Documents)
 - **Frontend**: Vanilla JavaScript, HTML5, CSS3 (Inter font, Lucide icons)
 
@@ -38,11 +38,12 @@ venv\Scripts\activate
 # On Mac/Linux
 source venv/bin/activate
 
+pip install --upgrade pip setuptools wheel
 pip install -r requirements.txt
 
 # Download required NLP models
-python -m spacy download en_core_web_lg
-python -m nltk.downloader stopwords punkt punkt_tab
+python -m spacy download en_core_web_sm
+python -m nltk.downloader stopwords punkt
 ```
 
 ### 3. Run the Application
