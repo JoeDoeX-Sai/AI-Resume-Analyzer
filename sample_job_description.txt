@@ -1,0 +1,42 @@
+Senior Software Engineer - AI/ML
+
+We are seeking an experienced Senior Software Engineer with strong expertise in AI/ML to join our growing team. You will be responsible for building and deploying machine learning models at scale.
+
+Requirements:
+• 5+ years of software engineering experience
+• Strong proficiency in Python and JavaScript
+• Experience with machine learning frameworks (TensorFlow, PyTorch, scikit-learn)
+• Expertise in NLP and natural language processing
+• Experience with cloud platforms (AWS, GCP, Azure)
+• Strong understanding of microservices architecture
+• Experience with Docker and Kubernetes
+• Proficiency in SQL and NoSQL databases (PostgreSQL, MongoDB)
+• Experience with RESTful API design and development
+• Knowledge of CI/CD pipelines and DevOps practices
+• Strong problem-solving and analytical skills
+• Excellent communication and teamwork abilities
+
+Preferred Qualifications:
+• Master's degree in Computer Science or related field
+• Experience with spaCy, NLTK, or similar NLP libraries
+• Experience with React or other modern frontend frameworks
+• AWS or GCP certifications
+• Open source contributions
+• Published research in ML/AI conferences
+
+Responsibilities:
+• Design and implement machine learning models for production
+• Build scalable APIs and microservices
+• Optimize system performance and reduce latency
+• Mentor junior engineers and conduct code reviews
+• Collaborate with cross-functional teams
+• Deploy and monitor ML models in production
+• Contribute to technical architecture decisions
+
+What We Offer:
+• Competitive salary and equity
+• Health, dental, and vision insurance
+• 401(k) matching
+• Flexible work arrangements
+• Professional development budget
+• Cutting-edge technology stack
