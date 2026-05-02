@@ -1,0 +1,15 @@
+flask==3.0.3
+flask-cors==4.0.1
+spacy==3.7.4
+scikit-learn==1.4.2
+numpy==1.26.4
+rake-nltk==1.0.6
+nltk==3.8.1
+pdfminer.six==20231228
+python-docx==1.1.2
+sentence-transformers==2.7.0
+torch==2.3.0
+transformers==4.40.2
+gunicorn==22.0.0
+python-multipart==0.0.9
+werkzeug==3.0.3

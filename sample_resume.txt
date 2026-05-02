@@ -1,0 +1,63 @@
+JOHN DOE
+Software Engineer
+Email: john.doe@email.com | Phone: (555) 123-4567
+LinkedIn: linkedin.com/in/johndoe | GitHub: github.com/johndoe
+San Francisco, CA
+
+PROFESSIONAL SUMMARY
+Results-driven Software Engineer with 5+ years of experience building scalable web applications and machine learning systems. Proven track record of reducing system latency by 40% and increasing user engagement by 25%. Expertise in Python, JavaScript, and cloud technologies.
+
+TECHNICAL SKILLS
+Languages: Python, JavaScript, TypeScript, Java, SQL
+Frameworks: React, Node.js, Flask, Django, TensorFlow, PyTorch
+Tools: Docker, Kubernetes, AWS, Git, Jenkins, MongoDB, PostgreSQL
+Specialties: Machine Learning, NLP, System Design, API Development
+
+PROFESSIONAL EXPERIENCE
+
+Senior Software Engineer | Tech Corp | San Francisco, CA | Jan 2021 - Present
+• Led development of microservices architecture serving 2M+ daily active users
+• Optimized database queries reducing response time by 45% and improving user experience
+• Implemented CI/CD pipeline using Jenkins and Docker, decreasing deployment time by 60%
+• Mentored team of 5 junior engineers on best practices and code review standards
+• Architected real-time analytics dashboard processing 100K events per second
+
+Software Engineer | StartupXYZ | San Francisco, CA | Jun 2019 - Dec 2020
+• Built RESTful APIs using Flask and Node.js handling 50K requests per minute
+• Developed machine learning model for recommendation system increasing CTR by 30%
+• Collaborated with product team to design and launch 3 major features
+• Reduced infrastructure costs by 25% through AWS resource optimization
+• Implemented automated testing suite achieving 85% code coverage
+
+Junior Developer | WebSolutions Inc | Remote | Jan 2018 - May 2019
+• Developed responsive web applications using React and TypeScript
+• Integrated third-party APIs including Stripe, Twilio, and SendGrid
+• Participated in agile sprints and daily standups with distributed team
+• Fixed 100+ bugs and improved application stability
+
+EDUCATION
+
+Bachelor of Science in Computer Science | University of California, Berkeley | 2017
+GPA: 3.8/4.0
+Relevant Coursework: Algorithms, Data Structures, Machine Learning, Database Systems
+
+PROJECTS
+
+AI Resume Analyzer | Python, spaCy, Flask, React
+• Built NLP-powered resume analysis tool using spaCy and sentence transformers
+• Implemented semantic similarity scoring and keyword extraction with RAKE
+• Deployed on AWS with Docker achieving 99.9% uptime
+
+Real-time Chat Application | Node.js, Socket.io, MongoDB
+• Developed scalable chat platform supporting 10K concurrent users
+• Implemented WebSocket connections for real-time messaging
+• Designed MongoDB schema for efficient message storage and retrieval
+
+CERTIFICATIONS
+• AWS Certified Solutions Architect - Associate (2022)
+• Google Cloud Professional Data Engineer (2021)
+
+ACHIEVEMENTS
+• Hackathon Winner - TechCrunch Disrupt 2020
+• Published research paper on NLP at ACL Conference 2021
+• Open source contributor with 500+ GitHub stars across projects

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Resume Analyzer</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <i data-lucide="brain-circuit" class="logo-icon"></i>
+        <span class="logo-text">ResumeAI</span>
+        <span class="logo-badge">NLP Powered</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN VIEWS CONTAINER -->
+  <main id="main-content">
+
+
+  <!-- VIEW: TEMPLATES -->
+  <section id="view-templates" class="view-section" style="display:none;">
+    <div class="container" style="padding-top: 40px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+        <h2>Resume Builder & Templates</h2>
+        <button class="btn-primary" onclick="exportPDF()"><i data-lucide="download" style="width:16px;height:16px;margin-right:6px;"></i>Export PDF</button>
+      </div>
+      <div style="display:grid; grid-template-columns: 250px 1fr; gap: 24px;">
+        <div class="template-sidebar">
+          <h3>Select Template</h3>
+          <div class="template-option active" onclick="selectTemplate('modern')">Modern (SaaS)</div>
+          <div class="template-option" onclick="selectTemplate('minimal')">Minimalist</div>
+          <div class="template-option" onclick="selectTemplate('ats')">Strict ATS</div>
+        </div>
+        <div class="template-preview" id="templatePreview" style="background: white; color: black; padding: 40px; min-height: 800px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 4px;">
+          <!-- Template injected here -->
+          <p style="color: #666; text-align: center; margin-top: 200px;">Analyze a resume first to generate a preview.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIEW: ANALYZER -->
+  <section id="view-analyzer" class="view-section">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge"><i data-lucide="sparkles" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i> AI-Powered ATS Analysis</div>
+      <h1 class="hero-title">Analyze Your Resume<br /><span class="gradient-text">with Real AI</span></h1>
+      <p class="hero-subtitle">
+        Deep NLP analysis using spaCy, semantic similarity, named entity recognition,
+        and intelligent scoring — not just keyword matching.
+      </p>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num">5+</span><span class="stat-label">AI Dimensions</span></div>
+        <div class="stat"><span class="stat-num">NER</span><span class="stat-label">Entity Extraction</span></div>
+        <div class="stat"><span class="stat-num">0–100</span><span class="stat-label">ATS Score</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- UPLOAD SECTION -->
+  <section class="upload-section" id="upload-section">
+    <div class="container">
+      <div class="upload-grid">
+
+        <!-- Left: Upload + JD -->
+        <div class="upload-card">
+          <h2 class="card-title">Upload Resume</h2>
+
+          <!-- File Drop Zone -->
+          <div class="drop-zone" id="dropZone">
+            <i data-lucide="file-text" class="drop-icon"></i>
+            <p class="drop-text">Drag & drop your resume here</p>
+            <p class="drop-sub">PDF, DOCX, or TXT · Max 5MB</p>
+            <button class="btn-outline" onclick="document.getElementById('fileInput').click()">Browse File</button>
+            <input type="file" id="fileInput" accept=".pdf,.docx,.txt" hidden />
+          </div>
+          <div class="file-info" id="fileInfo" style="display:none">
+            <i data-lucide="paperclip" class="file-icon"></i>
+            <span id="fileName"></span>
+            <button class="remove-btn" onclick="removeFile()"><i data-lucide="x" style="width:14px;height:14px;"></i></button>
+          </div>
+
+          <!-- OR paste text -->
+          <div class="divider"><span>or paste resume text</span></div>
+          <textarea id="resumeText" class="textarea" placeholder="Paste your resume text here..." rows="6"></textarea>
+
+          <!-- Role Selector -->
+          <div class="jd-section">
+            <label class="label">Target Role <span class="optional">(optional)</span></label>
+            <select id="roleSelector" class="textarea" style="margin-bottom: 12px; height: 42px;">
+              <option value="">Auto-detect from resume</option>
+              <option value="Software Engineer">Software Engineer</option>
+              <option value="Data Scientist">Data Scientist / Analyst</option>
+              <option value="UI/UX Designer">UI/UX Designer</option>
+              <option value="Product Manager">Product Manager</option>
+              <option value="Marketing Professional">Marketing Professional</option>
+            </select>
+          </div>
+
+          <!-- Job Description -->
+          <div class="jd-section" style="margin-top: 10px;">
+            <label class="label">Job Description <span class="optional">(recommended for best results)</span></label>
+            <textarea id="jobDescription" class="textarea" placeholder="Paste the job description here for targeted analysis..." rows="5"></textarea>
+          </div>
+
+          <button class="btn-primary" id="analyzeBtn" onclick="analyzeResume()">
+            <span id="btnText"><i data-lucide="zap" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:6px;"></i>Analyze Resume</span>
+            <span id="btnLoader" style="display:none"><i data-lucide="loader-2" class="spinning" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:6px;"></i>Analyzing...</span>
+          </button>
+        </div>
+
+        <!-- Right: How it works -->
+        <div class="how-it-works" id="how-it-works">
+          <h2 class="card-title">How It Works</h2>
+          <div class="steps">
+            <div class="step"><div class="step-num">1</div><div><strong>Parse</strong><p>Extract text from PDF, DOCX, or TXT</p></div></div>
+            <div class="step"><div class="step-num">2</div><div><strong>NLP Pipeline</strong><p>spaCy NER, tokenization, POS tagging</p></div></div>
+            <div class="step"><div class="step-num">3</div><div><strong>Skill Extraction</strong><p>RAKE + noun chunks + pattern matching</p></div></div>
+            <div class="step"><div class="step-num">4</div><div><strong>Semantic Scoring</strong><p>Sentence embeddings + TF-IDF cosine similarity</p></div></div>
+            <div class="step"><div class="step-num">5</div><div><strong>ATS Score</strong><p>Multi-factor weighted scoring (0–100)</p></div></div>
+            <div class="step"><div class="step-num">6</div><div><strong>AI Feedback</strong><p>Context-aware suggestions and improvements</p></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ERROR BANNER -->
+  <div class="error-banner" id="errorBanner" style="display:none">
+    <span id="errorMsg"></span>
+    <button onclick="document.getElementById('errorBanner').style.display='none'">✕</button>
+  </div>
+
+  <!-- RESULTS DASHBOARD -->
+  <section class="results-section" id="resultsSection" style="display:none">
+    <div class="container">
+      <div class="results-header">
+        <div style="display:flex; align-items: center; gap: 12px;">
+          <h2>Analysis Results</h2>
+          <span id="detectedDomain" class="badge-present" style="display:none;"></span>
+        </div>
+        <div class="results-header-actions">
+          <label class="toggle-switch" style="display:flex; align-items:center; gap:8px; font-size: 0.85rem; font-weight: 500; cursor: pointer;">
+            <input type="checkbox" id="recruiterModeToggle" onchange="toggleRecruiterMode()" style="display:none;" />
+            <div class="toggle-slider"></div>
+            Recruiter View
+          </label>
+          <button class="btn-outline-sm" id="improveFullBtn" onclick="improveFullResume()"><i data-lucide="wand-2" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>AI Rewrite</button>
+          <button class="btn-outline-sm" id="emailBtn" onclick="emailReport()"><i data-lucide="mail" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Email Report</button>
+          <button class="btn-outline-sm" onclick="showView('templates')"><i data-lucide="file-check-2" style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;"></i>Templates</button>
+          <button class="btn-outline-sm" onclick="scrollToAdvanced()">Advanced Tools</button>
+          <button class="btn-outline-sm" onclick="resetAnalysis()">New Analysis</button>
+        </div>
+      </div>
+
+      <!-- Score Hero -->
+      <div class="score-hero">
+        <div class="score-circle-wrap">
+          <svg class="score-ring" viewBox="0 0 120 120">
+            <circle class="ring-bg" cx="60" cy="60" r="52" />
+            <circle class="ring-fill" id="scoreRing" cx="60" cy="60" r="52"
+              stroke-dasharray="326.7" stroke-dashoffset="326.7" />
+          </svg>
+          <div class="score-center">
+            <span class="score-num" id="scoreNum">0</span>
+            <span class="score-label">/ 100</span>
+          </div>
+        </div>
+        <div class="score-meta">
+          <div class="score-grade" id="scoreGrade">—</div>
+          <p class="score-summary" id="scoreSummary"></p>
+        </div>
+      </div>
+
+      <!-- Dimension Bars -->
+      <div class="dimensions-card">
+        <h3>Score Breakdown</h3>
+        <div id="dimensionBars"></div>
+      </div>
+
+      <!-- Main Grid -->
+      <div class="results-grid">
+
+        <!-- Skills Panel -->
+        <div class="panel">
+          <h3 class="panel-title"><i data-lucide="microscope" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:6px;"></i>Extracted Skills</h3>
+          <div id="skillsContainer">
+             <!-- Categorized skills will be injected here -->
+          </div>
+        </div>
+
+        <!-- Keyword Match Panel -->
+        <div class="panel">
+          <h3 class="panel-title"><i data-lucide="target" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:6px;"></i>Keyword Match</h3>
+          <div id="keywordPanel"></div>
+        </div>
+
+        <!-- NER Panel -->
+        <div class="panel">
+          <h3 class="panel-title"><i data-lucide="tag" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:6px;"></i>Named Entities (NER)</h3>
+          <div id="nerPanel"></div>
+        </div>
+
+        <!-- Sections Panel -->
+        <div class="panel">
+          <h3 class="panel-title"><i data-lucide="list-checks" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:6px;"></i>Resume Sections</h3>
+          <div id="sectionsPanel"></div>
+        </div>
+
+        <!-- Action Verbs Panel -->
+        <div class="panel">
+          <h3 class="panel-title"><i data-lucide="zap" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:6px;"></i>Action Verbs</h3>
+          <div id="verbsPanel"></div>
+        </div>
+
+        <!-- Readability Panel -->
+        <div class="panel">
+          <h3 class="panel-title"><i data-lucide="book-open" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:6px;"></i>Readability</h3>
+          <div id="readabilityPanel"></div>
+        </div>
+      </div>
+
+      <!-- Feedback Section (Full Width Layout) -->
+      <div style="display: grid; grid-template-columns: 1fr 320px; gap: 24px; margin-bottom: 40px;">
+        <!-- Left: Detailed Tabs -->
+        <div class="feedback-section" style="margin-bottom: 0;">
+          <h3><i data-lucide="bot" style="width:20px;height:20px;display:inline;vertical-align:middle;margin-right:8px;"></i>AI Feedback & Suggestions</h3>
+
+          <div class="feedback-tabs">
+            <button class="tab-btn active" onclick="showTab('keywords')">Keywords</button>
+            <button class="tab-btn" onclick="showTab('bullets')">Bullet Strength</button>
+            <button class="tab-btn" onclick="showTab('projects')">Project Strength</button>
+            <button class="tab-btn" onclick="showTab('verbs')">Action Verbs</button>
+            <button class="tab-btn" onclick="showTab('readability')">Readability</button>
+            <button class="tab-btn" onclick="showTab('structure')">Structure</button>
+          </div>
+          <div class="tab-content" id="tabContent"></div>
+        </div>
+
+        <!-- Right: Real-time Suggestions Panel -->
+        <div class="panel suggestions-panel">
+          <h3 class="panel-title"><i data-lucide="zap" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:6px;color:var(--yellow);"></i>Quick Improvements</h3>
+          <div class="top-suggestions" id="topSuggestions" style="display:flex; flex-direction:column;"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ADVANCED FEATURES SECTION -->
+  <section class="advanced-section" id="advancedSection" style="display:none">
+    <div class="container">
+
+      <!-- Advanced Feature Tabs -->
+      <div class="adv-tab-bar">
+        <button class="adv-tab-btn active" onclick="switchAdvTab('ats-sim')">ATS Simulation</button>
+        <button class="adv-tab-btn" onclick="switchAdvTab('skill-gap')">Skill Gap</button>
+        <button class="adv-tab-btn" onclick="switchAdvTab('bullet')">Bullet Improver</button>
+        <button class="adv-tab-btn" onclick="switchAdvTab('versions')">Versions</button>
+        <button class="adv-tab-btn" onclick="switchAdvTab('github')">GitHub Analyzer</button>
+      </div>
+
+      <!-- ATS Simulation Panel -->
+      <div class="adv-panel" id="adv-ats-sim">
+        <div class="adv-panel-header">
+          <h3>ATS Simulation</h3>
+          <p class="adv-panel-desc">Simulates a recruiter 6-second scan and ATS parser. Get a pass/fail verdict with detailed reasoning.</p>
+        </div>
+        <button class="btn-primary adv-run-btn" id="atsSimBtn" onclick="runATSSimulation()">
+          <span id="atsSimBtnText">Run ATS Simulation</span>
+          <span id="atsSimLoader" style="display:none">Running...</span>
+        </button>
+        <div id="atsSimResult" style="display:none"></div>
+      </div>
+
+      <!-- Skill Gap Panel -->
+      <div class="adv-panel" id="adv-skill-gap" style="display:none">
+        <div class="adv-panel-header">
+          <h3>Skill Gap Analyzer</h3>
+          <p class="adv-panel-desc">Compares your resume skills against the job description and generates a learning roadmap for each gap.</p>
+        </div>
+        <button class="btn-primary adv-run-btn" id="skillGapBtn" onclick="runSkillGap()">
+          <span id="skillGapBtnText">Analyze Skill Gap</span>
+          <span id="skillGapLoader" style="display:none">Analyzing...</span>
+        </button>
+        <div id="skillGapResult" style="display:none"></div>
+      </div>
+
+      <!-- Bullet Improver Panel -->
+      <div class="adv-panel" id="adv-bullet" style="display:none">
+        <div class="adv-panel-header">
+          <h3>Bullet Point Improver</h3>
+          <p class="adv-panel-desc">Paste a resume bullet point and get an improved version with strong action verbs and quantified metrics.</p>
+        </div>
+        <div class="bullet-input-wrap">
+          <label class="label">Paste a bullet point</label>
+          <textarea id="bulletInput" class="textarea" rows="3" placeholder="e.g. Worked on the backend API for the user authentication system"></textarea>
+          <button class="btn-primary adv-run-btn" id="bulletBtn" onclick="runBulletImprover()">
+            <span id="bulletBtnText">Improve Bullet</span>
+            <span id="bulletLoader" style="display:none">Improving...</span>
+          </button>
+        </div>
+        <div id="bulletResult" style="display:none"></div>
+      </div>
+
+      <!-- Versions Panel -->
+      <div class="adv-panel" id="adv-versions" style="display:none">
+        <div class="adv-panel-header">
+          <h3>Resume Versions</h3>
+          <p class="adv-panel-desc">Save the current analysis as a named version and compare scores across versions.</p>
+        </div>
+        <div class="version-save-wrap">
+          <input type="text" id="versionLabel" class="version-input" placeholder="Version name (e.g. v1 - Software Engineer)" />
+          <button class="btn-primary adv-run-btn" onclick="saveVersion()">Save Current Version</button>
+        </div>
+        <div id="versionsList"></div>
+        <div id="versionCompare" style="display:none"></div>
+      </div>
+
+      <!-- GitHub Analyzer Panel -->
+      <div class="adv-panel" id="adv-github" style="display:none">
+        <div class="adv-panel-header">
+          <h3>GitHub Analyzer</h3>
+          <p class="adv-panel-desc">Enter a GitHub profile or repository URL to extract tech stack and generate resume bullet points.</p>
+        </div>
+        <div class="github-input-wrap">
+          <label class="label">GitHub URL</label>
+          <input type="text" id="githubUrl" class="version-input" placeholder="https://github.com/username or https://github.com/username/repo" />
+          <button class="btn-primary adv-run-btn" id="githubBtn" onclick="runGitHubAnalyzer()">
+            <span id="githubBtnText">Analyze GitHub</span>
+            <span id="githubLoader" style="display:none">Fetching...</span>
+          </button>
+        </div>
+        <div id="githubResult" style="display:none"></div>
+      </div>
+
+    </div>
+  </section>
+
+  </section> <!-- END VIEW: ANALYZER -->
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>Built with spaCy · Sentence Transformers · TF-IDF · RAKE · Flask</p>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>
