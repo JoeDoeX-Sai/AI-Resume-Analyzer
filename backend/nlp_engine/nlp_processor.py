@@ -119,14 +119,28 @@ class NLPProcessor:
     """
     
     def __init__(self):
-        # Load spaCy model
-        try:
-            self.nlp = spacy.load("en_core_web_lg")
-        except OSError:
-            try:
-                self.nlp = spacy.load("en_core_web_md")
-            except OSError:
-                self.nlp = spacy.load("en_core_web_sm")
+        self._models_loaded = False
+        self.nlp = None
+        self.embedder = None
+        self.matcher = None
+
+        # RAKE for keyword extraction
+        self.rake = Rake()
+
+        # TF-IDF vectorizer
+        self.tfidf = TfidfVectorizer(
+            stop_words="english",
+            ngram_range=(1, 3),
+            max_features=500,
+        )
+
+    def _load_models(self):
+        if self._models_loaded:
+            return
+            
+        print("[INFO] Lazy-loading NLP models (en_core_web_sm and all-MiniLM-L6-v2)...")
+        # Use small model to prevent exceeding Render 512MB RAM limit
+        self.nlp = spacy.load("en_core_web_sm")
 
         # Add EntityRuler for tech skills
         ruler = self.nlp.add_pipe("entity_ruler", before="ner")
@@ -163,18 +177,12 @@ class NLPProcessor:
         soft_patterns = [self.nlp.make_doc(text) for text in SOFT_SKILLS_WHITELIST]
         self.matcher.add("SOFT_SKILLS", soft_patterns)
 
-        # RAKE for keyword extraction
-        self.rake = Rake()
-
-        # TF-IDF vectorizer
-        self.tfidf = TfidfVectorizer(
-            stop_words="english",
-            ngram_range=(1, 3),
-            max_features=500,
-        )
+        self._models_loaded = True
+        print("[INFO] NLP models loaded successfully.")
 
     def process(self, text: str) -> dict:
         """Run full NLP pipeline on resume text."""
+        self._load_models()
         doc = self.nlp(text)
         skills_data = self._extract_skills(text, doc)
 
@@ -456,6 +464,7 @@ class NLPProcessor:
 
     def get_semantic_similarity(self, text1: str, text2: str) -> float:
         """Compute cosine similarity between two texts using sentence embeddings."""
+        self._load_models()
         if not text1.strip() or not text2.strip():
             return 0.0
         emb1 = self.embedder.encode(text1[:2000], convert_to_numpy=True)
